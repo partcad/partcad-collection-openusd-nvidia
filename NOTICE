@@ -1,0 +1,18 @@
+partcad-collection-openusd-nvidia
+=================================
+
+This PartCAD package serves NVIDIA's Omniverse sample content as PartCAD parts.
+
+The code in this repository (the `nvidia_repo.py` repository plugin, the shared
+`usd_assets.py`, the PartCAD configuration and the tests) is:
+
+    Copyright 2026 PartCAD
+    Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+No asset is included in this repository. The assets, their layers and their
+textures are fetched on demand from NVIDIA's public bucket omniverse-content-production,
+and remain NVIDIA's, under the NVIDIA Omniverse License Agreement
+(https://docs.omniverse.nvidia.com/platform/latest/common/NVIDIA_Omniverse_License_Agreement.html).
+
+NVIDIA and Omniverse are trademarks of NVIDIA Corporation. This package is
+not affiliated with or endorsed by NVIDIA.
