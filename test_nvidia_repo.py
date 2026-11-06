@@ -38,6 +38,7 @@ SIMREADY = "Assets/simready_content/"
 FILES = {
     "Assets/ArchVis/Industrial/Pallets/Pallet_A1.usd": _usda("( subLayers = [@./Textures/T_Pallet.png@] )\n"),
     "Assets/ArchVis/Industrial/Pallets/Textures/T_Pallet.png": b"png",
+    "Assets/ArchVis/Industrial/Pallets/Textures/.thumbs/256x256/T_Pallet.png.auto.png": b"small png",
     "Assets/ArchVis/Industrial/Pallets/.thumbs/256x256/Pallet_A1.usd.png": b"png",
     "Assets/ArchVis/Industrial/Racks/Rack_A1.usd": _usda(),
     "Assets/ArchVis/Industrial/Shelves/Rack_A1.usd": _usda(),
@@ -152,13 +153,19 @@ def test_a_simready_prop_is_its_folder_and_reaches_the_materials_beside_it(nvidi
         assert z.namelist() == ["common_assets/props/pallet_a01/pallet_a01.usd", "materials/physics/physics_metal.usda"]
 
 
-def test_textures_only_when_asked_for(nvidia):
-    plain = base64.b64decode(nvidia().get("archvis-industrial/files/Pallet_A1.usdz"))
-    with zipfile.ZipFile(io.BytesIO(plain)) as z:
+def test_a_texture_s_thumbnail_stands_in_for_it_and_the_whole_of_it_only_when_asked(nvidia):
+    looked = base64.b64decode(nvidia().get("archvis-industrial/files/Pallet_A1.usdz"))
+    with zipfile.ZipFile(io.BytesIO(looked)) as z:
+        assert z.namelist() == ["Pallet_A1.usd", "Textures/T_Pallet.png"]
+        # Omniverse's 256-pixel thumbnail of it, under its name.
+        assert z.read("Textures/T_Pallet.png") == b"small png"
+    bare = base64.b64decode(nvidia(looks=False).get("archvis-industrial/files/Pallet_A1.bare.usdz"))
+    with zipfile.ZipFile(io.BytesIO(bare)) as z:
         assert z.namelist() == ["Pallet_A1.usd"]
     textured = base64.b64decode(nvidia(textures=True).get("archvis-industrial/files/Pallet_A1.textured.usdz"))
     with zipfile.ZipFile(io.BytesIO(textured)) as z:
         assert z.namelist() == ["Pallet_A1.usd", "Textures/T_Pallet.png"]
+        assert z.read("Textures/T_Pallet.png") == b"png"
 
 
 def test_the_samples_are_the_scenes_and_listing_them_asks_nothing(nvidia):
