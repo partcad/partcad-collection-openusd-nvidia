@@ -37,6 +37,10 @@ built, and kept by PartCAD from then on.
 package says `manufacturable: false`, and so does the plugin of what it serves.
 
 Requires PartCAD 0.9.11 or newer: the first release whose `//builtin` has the `usd` part type.
+Until it is on PyPI, which has 0.9.2, that is PartCAD's `devel` branch:
+`python -m pip install --upgrade git+https://github.com/partcad/partcad.git@devel`, as
+[Installing a development version](https://partcad.readthedocs.io/en/latest/contributing.html#installing-a-development-version)
+says. An older PartCAD refuses this package, saying which version it needs.
 
 ## Listing, searching, building
 
@@ -109,15 +113,16 @@ an enrich of it:
 PartCAD's own documentation of the part type is
 [the `usd` part type](https://partcad.readthedocs.io/en/latest/config_parts.html#usd-files).
 
-The materials are NVIDIA's MDL, which is left out with the textures: a part is drawn in the colour a
-layer gives, where it gives one. A SimReady prop's file also holds the studio its thumbnail was
+The materials are NVIDIA's MDL. A part carries its presets and the images they read (see `looks`
+below), and each face is drawn in the colour, roughness and metalness they give; with `looks: false`
+they are left out, and a part is drawn in the colour a layer gives, where it gives one. A SimReady prop's file also holds the studio its thumbnail was
 rendered in, beside the prop; that is not the prop's default prim, and is not built.
 
 ## Parameters of the plugin
 
 | Parameter | Default | What it is |
 | --- | --- | --- |
-| `looks` | `true` | Whether a part's USDZ carries what its look is read from: its MDL presets, and its colour and ORM (occlusion, roughness, metalness) textures, each as the 256-pixel thumbnail NVIDIA's bucket keeps of it - 40 to 90 KB, where the texture is up to 28 MB. PartCAD colours each face from them. |
+| `looks` | `true` | Whether a part's USDZ carries what its look is read from: its MDL presets, and its colour and ORM (occlusion, roughness, metalness) textures, each as the 256-pixel thumbnail NVIDIA's bucket keeps of it - 40 to 90 KB, where the texture is up to 28 MB. An image the bucket keeps no thumbnail of is carried as it is if it is no more than 8 MB, and left out otherwise, so that the faces it colours are drawn in the colour a layer gives. PartCAD colours each face from them. |
 | `textures` | `false` | Whether a part's USDZ carries every texture its layers name, each as it is, at full size: to open it complete in another USD application. |
 | `max_size_mb` | `512` | The most a part's USDZ may be, in MB. An asset found to be larger is refused, saying so, before the rest of it is fetched. |
 
